@@ -1,8 +1,14 @@
 package com.example.Etudiant.demo.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "etudiants")
 public class Etudiant {
 
@@ -25,7 +31,7 @@ public class Etudiant {
     private String certificat_certifier;
 
 
-    public Etudiant() {
+   /* public Etudiant() {
     }
 
     public Etudiant(Long id, String nom, String prenom, String email, String phone,
@@ -118,5 +124,5 @@ public class Etudiant {
 
     public void setPassword(String password) {
         this.password = password;
-    }
+    }*/
 }

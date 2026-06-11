@@ -3,6 +3,8 @@ package com.example.Etudiant.demo.Service;
 import com.example.Etudiant.demo.Entity.Etudiant;
 import com.example.Etudiant.demo.Repository.EtudiantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,8 @@ public class EtudiantService {
     private EtudiantRepository etudiantRepository;
 
     // ── Récupérer tous les étudiants ──────────────────────────────────────────
-    public List<Etudiant> getAllEtudiants() {
-        return etudiantRepository.findAll();
+    public Page<Etudiant> getAllEtudiants(Pageable pageable) {
+        return etudiantRepository.findAll(pageable);
     }
 
     // ── Récupérer un étudiant par ID ──────────────────────────────────────────

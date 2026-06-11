@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/Encadrement")
+@RequestMapping("/api/Encadrements")
 public class EncadrementController {
 
     @Autowired

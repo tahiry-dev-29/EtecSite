@@ -1,11 +1,15 @@
 package com.example.Enseignant.demo.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "enseignant")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Enseignant {
 
     @Id
@@ -22,8 +26,8 @@ public class Enseignant {
     private String id_etudiant;
     private String id_filier;
 
-    public Enseignant(){
+    /*public Enseignant(){
 
-    }
+    }*/
 
 }

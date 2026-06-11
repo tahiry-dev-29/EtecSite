@@ -4,6 +4,8 @@ import com.example.Enseignant.demo.Entity.Enseignant;
 import com.example.Enseignant.demo.Service.EnseignantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/Enseignants")
+@RequestMapping("/api/Enseignants")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor // Gère automatiquement l'injection du service
 public class EnseignantController {
@@ -21,8 +23,8 @@ public class EnseignantController {
 
     // GET /api/enseignants
     @GetMapping
-    public ResponseEntity<List<Enseignant>> getAllEnseignants() {
-        return ResponseEntity.ok(enseignantService.getAllEnseignants());
+    public ResponseEntity<Page<Enseignant>> getAllEnseignants(Pageable pageable) {
+        return ResponseEntity.ok(enseignantService.getAllEnseignants(pageable));
     }
 
     // GET /api/enseignants/{id}

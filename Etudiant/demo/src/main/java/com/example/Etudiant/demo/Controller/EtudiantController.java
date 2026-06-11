@@ -3,6 +3,8 @@ package com.example.Etudiant.demo.Controller;
 import com.example.Etudiant.demo.Entity.Etudiant;
 import com.example.Etudiant.demo.Service.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Etudiants")
+@RequestMapping("/api/Etudiants")
 @CrossOrigin(origins = "*")
 public class EtudiantController {
 
@@ -19,8 +21,8 @@ public class EtudiantController {
 
     // ── GET /api/etudiants ────────────────────────────────────────────────────
     @GetMapping
-    public ResponseEntity<List<Etudiant>> getAllEtudiants() {
-        return ResponseEntity.ok(etudiantService.getAllEtudiants());
+    public ResponseEntity<Page<Etudiant>> getAllEtudiants(Pageable pageable) {
+        return ResponseEntity.ok(etudiantService.getAllEtudiants(pageable));
     }
 
     // ── GET /api/etudiants/{id} ───────────────────────────────────────────────

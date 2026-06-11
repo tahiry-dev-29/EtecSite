@@ -3,6 +3,8 @@ package com.example.Enseignant.demo.Service;
 import com.example.Enseignant.demo.Entity.Enseignant;
 import com.example.Enseignant.demo.Repository.EnseignantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +18,8 @@ public class EnseignantService {
     private final EnseignantRepository enseignantRepository;
 
     // ── Tout récupérer ────────────────────────────────────────────────────────
-    public List<Enseignant> getAllEnseignants() {
-        return enseignantRepository.findAll();
+    public Page<Enseignant> getAllEnseignants(Pageable pageable) {
+        return enseignantRepository.findAll(pageable);
     }
 
     // ── Récupérer par ID ──────────────────────────────────────────────────────
