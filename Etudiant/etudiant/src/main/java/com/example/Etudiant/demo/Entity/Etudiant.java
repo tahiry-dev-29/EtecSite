@@ -15,16 +15,12 @@ public class Etudiant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String grade;
-    private String user_id;
-   /* private String id_emploi_du_temps;
-    private String encadreur_id;*/
-    private String parcours;
-    private String mentiont;
+
+    private Long userId;
+
     private String matricule;
+    private String cin;
+    private String adresse;
     private String phone;
     private String photo;
-    private String cin;
-    private String releve;
-
 }

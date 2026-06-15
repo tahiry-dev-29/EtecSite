@@ -1,80 +1,65 @@
 package com.example.Etudiant.demo.Service;
 
-import com.example.Etudiant.demo.Entity.Etudiant;
-import com.example.Etudiant.demo.Repository.EtudiantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class EtudiantService {
 
-    @Autowired
-    private EtudiantRepository etudiantRepository;
+    private final EtudiantRepository etudiantRepository;
 
-    // ── Récupérer tous les étudiants ──────────────────────────────────────────
-    public Page<Etudiant> getAllEtudiants(Pageable pageable) {
-        return etudiantRepository.findAll(pageable);
-    }
+    // 🔥 CREATE ETUDIANT
+    public Etudiant createEtudiant(Etudiant etudiant, HttpServletRequest request) {
 
-    // ── Récupérer un étudiant par ID ──────────────────────────────────────────
-    public Optional<Etudiant> getEtudiantById(Long id) {
-        return etudiantRepository.findById(id);
-    }
+        // 🔵 récupérer userId depuis JwtFilter
+        Long userId = (Long) request.getAttribute("userId");
 
-    // ── Récupérer un étudiant par email ───────────────────────────────────────
-    public Optional<Etudiant> getEtudiantByEmail(String email) {
-        return etudiantRepository.findByEmail(email);
-    }
-
-    // ── Récupérer un étudiant par matricule ───────────────────────────────────
-    public Optional<Etudiant> getEtudiantByMatricule(String matricule) {
-        return etudiantRepository.findByMatricule(matricule);
-    }
-
-    // ── Créer un nouvel étudiant ──────────────────────────────────────────────
-    public Etudiant createEtudiant(Etudiant etudiant) {
-        if (etudiantRepository.existsByEmail(etudiant.getEmail())) {
-            throw new RuntimeException("Un étudiant avec cet email existe déjà.");
+        if (userId == null) {
+            throw new RuntimeException("userId introuvable dans le token");
         }
-        if (etudiantRepository.existsByMatricule(etudiant.getMatricule())) {
-            throw new RuntimeException("Un étudiant avec ce matricule existe déjà.");
-        }
+
+        // 🔵 lien User ↔ Etudiant
+        etudiant.setUserId(userId);
+
         return etudiantRepository.save(etudiant);
     }
 
-    // ── Mettre à jour un étudiant ─────────────────────────────────────────────
-    public Etudiant updateEtudiant(Long id, Etudiant updated) {
-        Etudiant existing = etudiantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec l'ID : " + id));
+    // 🔥 GET ALL ETUDIANTS
+    public List<Etudiant> getAllEtudiants() {
+        return etudiantRepository.findAll();
+    }
 
-        existing.setNom(updated.getNom());
-        existing.setPrenom(updated.getPrenom());
-        existing.setEmail(updated.getEmail());
-        existing.setPhone(updated.getPhone());
-        existing.setPhoto(updated.getPhoto());
-        existing.setGrade(updated.getGrade());
-        existing.setMatricule(updated.getMatricule());
-        existing.setParcours(updated.getParcours());
-        existing.setMentiont(updated.getMentiont());
-        existing.setCin(updated.getCin());
-        existing.setEncadreur_id(updated.getEncadreur_id());
-        existing.setId_emploi_du_temps(updated.getId_emploi_du_temps());
-        existing.setCertificat_certifier(updated.getCertificat_certifier());
-        existing.setPassword(updated.getPassword());
+    // 🔥 GET BY ID
+    public Etudiant getEtudiantById(Long id) {
+        return etudiantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Etudiant introuvable"));
+    }
+
+    // 🔥 GET BY MATRICULE
+    public Etudiant getByMatricule(String matricule) {
+        return etudiantRepository.findByMatricule(matricule)
+                .orElseThrow(() -> new RuntimeException("Matricule introuvable"));
+    }
+
+    // 🔥 UPDATE ETUDIANT
+    public Etudiant updateEtudiant(Long id, Etudiant newData) {
+
+        Etudiant existing = getEtudiantById(id);
+
+        existing.setMatricule(newData.getMatricule());
+        existing.setCin(newData.getCin());
+        existing.setAdresse(newData.getAdresse());
+        existing.setPhone(newData.getPhone());
+        existing.setPhoto(newData.getPhoto());
 
         return etudiantRepository.save(existing);
     }
 
-    // ── Supprimer un étudiant ─────────────────────────────────────────────────
+    // 🔥 DELETE ETUDIANT
     public void deleteEtudiant(Long id) {
-        if (!etudiantRepository.existsById(id)) {
-            throw new RuntimeException("Étudiant introuvable avec l'ID : " + id);
-        }
         etudiantRepository.deleteById(id);
     }
 }

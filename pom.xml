@@ -23,10 +23,10 @@
     <module>president</module>
     <module>utilisateur</module>
     <module>slides</module>
-    <module>Encadrement/demo</module>
-    <module>Encadreur/demo</module>
-    <module>Enseignant/demo</module>
-    <module>Etudiant/demo</module>
+    <module>Encadrement/encadrement</module>
+    <module>Encadreur/encadreur</module>
+    <module>Enseignant/enseignant</module>
+    <module>Etudiant/etudiant</module>
     <module>api_gateway</module>
     <module>discovery_service</module>
     <module>config_server</module>

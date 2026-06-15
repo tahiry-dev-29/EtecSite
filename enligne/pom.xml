@@ -71,12 +71,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
-			<version>1.3.04</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
@@ -88,14 +82,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-<<<<<<< HEAD:Enseignant/demo/pom.xml
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
-=======
-
->>>>>>> 9f03b8188f816637c27ec3e5dffaedd242b6e41b:enligne/pom.xml
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
