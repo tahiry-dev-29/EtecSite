@@ -14,20 +14,17 @@ public class Enseignant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_enseignant;
-    private String nom;
-    private String prenom;
-    private String cours;
+    private Long id;
+    private Long userId;
+    private Long matiereId;
+    private Long filiereId;
+    private String matricule;
     private String photo;
     private String adresse;
-    private String mail;
+    private String phone;
     private String cin;
-    private String statue;
-    private String id_etudiant;
-    private String id_filier;
+    private String specialite;
+    private String diplome;
 
-    /*public Enseignant(){
-
-    }*/
 
 }

@@ -2,73 +2,149 @@ package com.example.Enseignant.demo.Service;
 
 import com.example.Enseignant.demo.Entity.Enseignant;
 import com.example.Enseignant.demo.Repository.EnseignantRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class EnseignantService {
 
     private final EnseignantRepository enseignantRepository;
+    private final String UPLOAD_DIR = "/upload";
 
-    // ── Tout récupérer ────────────────────────────────────────────────────────
+
+    @Transactional
+    public Enseignant createEnseignant(String matricule,
+                                       String adresse,
+                                       String phone,
+                                       String cin,
+                                       Long filiereId,
+                                       Long matiereId,
+                                       MultipartFile photo,
+                                       MultipartFile diplome,
+                                       HttpServletRequest request) {
+
+        try {
+            File dir = new File(UPLOAD_DIR);
+            if (dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String photoName = UUID.randomUUID() + "_" + photo.getOriginalFilename();
+            Path photoPath = Paths.get(UPLOAD_DIR, photoName);
+            Files.write(photoPath, photo.getBytes());
+
+            String diplomeName = UUID.randomUUID() + "_" + diplome.getOriginalFilename();
+            Path diplomePath = Paths.get(UPLOAD_DIR, diplomeName);
+            Files.write(diplomePath, diplome.getBytes());
+
+            Enseignant enseignant = new Enseignant();
+            if (enseignantRepository.existsByMatricule(enseignant.getMatricule())) {
+                throw new RuntimeException("Un enseignant avec ce matricule existe déjà.");
+            }
+
+            enseignant.setMatricule(matricule);
+            enseignant.setAdresse(adresse);
+            enseignant.setPhone(phone);
+            enseignant.setCin(cin);
+            enseignant.setSpecialite(specialate);
+            enseignant.setPhoto(photoName);
+            enseignant.setDiplome(diplomeName);
+
+            Long userId = (Long) request.getAttribute("userId");
+            if (userId == null) {
+                throw new RuntimeException("UserId introvable dans le token");
+            }
+
+            enseignant.setUserId(userId);
+            enseignant.setFiliereId(filiereId);
+            enseignant.setMatiereId(matiereId);
+            return enseignantRepository.save(enseignant);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public Page<Enseignant> getAllEnseignants(Pageable pageable) {
         return enseignantRepository.findAll(pageable);
     }
 
-    // ── Récupérer par ID ──────────────────────────────────────────────────────
-    public Optional<Enseignant> getEnseignantById(Long id) {
-        return enseignantRepository.findById(id);
+    public Enseignant getEnseignantById(Long id) {
+        return enseignantRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Enseignant Introuvable"));
     }
 
-    // ── Récupérer par Mail ─────────────────────────────────────────────────────
-    public Optional<Enseignant> getEnseignantByMail(String mail) {
-        return enseignantRepository.findByMail(mail);
+    public Enseignant getByMatricule(String matricule) {
+        return enseignantRepository.findByMatricule(matricule)
+                .orElseThrow(() -> new RuntimeException("Matricule introuvable"));
     }
 
-    // ── Créer un enseignant (POST) ────────────────────────────────────────────
-    @Transactional
-    public Enseignant createEnseignant(Enseignant enseignant) {
-        if (enseignantRepository.existsByMail(enseignant.getMail())) {
-            throw new RuntimeException("Un enseignant avec cet email existe déjà.");
-        }
-        return enseignantRepository.save(enseignant);
-    }
 
-    // ── Modifier un enseignant (PUT) ──────────────────────────────────────────
-    @Transactional
-    public Enseignant updateEnseignant(Long id, Enseignant updated) {
-        Enseignant existing = enseignantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Enseignant introuvable avec l'ID : " + id));
+    public Enseignant updateEnseignant(Long id,
+                                       String matricule,
+                                       String adresse,
+                                       String phone,
+                                       String cin,
+                                       String specialite,
+                                       MultipartFile photo,
+                                       MultipartFile diplome ) {
 
-        // Sécurité mail unique
-        if (!existing.getMail().equals(updated.getMail()) && enseignantRepository.existsByMail(updated.getMail())) {
-            throw new RuntimeException("Cet email est déjà utilisé par un autre enseignant.");
-        }
-
+        Enseignant existing = getEnseignantById(id);
         // Mise à jour de tous les champs de ton entité
-        existing.setNom(updated.getNom());
-        existing.setPrenom(updated.getPrenom());
-        existing.setCours(updated.getCours());
-        existing.setPhoto(updated.getPhoto());
-        existing.setAdresse(updated.getAdresse());
-        existing.setMail(updated.getMail());
-        existing.setCin(updated.getCin());
-        existing.setStatue(updated.getStatue()); // (statut)
-        existing.setId_etudiant(updated.getId_etudiant());
-        existing.setId_filier(updated.getId_filier());
+        existing.setMatricule(matricule);
+        existing.setAdresse(adresse);
+        existing.setPhone(phone);
+        existing.setCin(cin);
+        existing.setSpecialite(specialite);
+
+        try {
+            if (photo != null && !photo.isEmpty()) {
+                if (existing.getPhoto() != null) {
+                    File old = new File(UPLOAD_DIR + existing.getPhoto());
+                    if (old.exists()) old.delete();
+
+                    String photoName = UUID.randomUUID() + "_" + photo.getOriginalFilename();
+                    Path path = Paths.get(UPLOAD_DIR, photoName);
+                    Files.write(path, photo.getBytes());
+
+                    existing.setPhoto(photoName);
+                }
+            }
+
+            if (diplome != null && !diplome.isEmpty()) {
+                if (existing.getDiplome() != null) {
+                    File old = new File(UPLOAD_DIR + existing.getDiplome());
+                    if (old.exists()) old.delete();
+
+                    String diplomeName = UUID.randomUUID() + "_" + diplome.getOriginalFilename();
+                    Path path = Paths.get(UPLOAD_DIR, diplomeName);
+                    Files.write(path, diplome.getBytes());
+
+                    existing.setDiplome(diplomeName);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de modifier ces fichiers");
+        }
 
         return enseignantRepository.save(existing);
     }
 
-    // ── Supprimer un enseignant (DELETE) ──────────────────────────────────────
-    @Transactional
     public void deleteEnseignant(Long id) {
         if (!enseignantRepository.existsById(id)) {
             throw new RuntimeException("Enseignant introuvable avec l'ID : " + id);

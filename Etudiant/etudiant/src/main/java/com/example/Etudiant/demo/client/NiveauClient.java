@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "NIVEAU")
 public interface NiveauClient {
 
-    @GetMapping("/niveaux/{id}")
+    @GetMapping("/api/niveau/{id}")
     NiveauDto getNiveau(@PathVariable Long id);
 }

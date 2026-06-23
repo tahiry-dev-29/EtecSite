@@ -20,6 +20,7 @@ public class Etudiant {
     private Long filiereId;
     private Long niveauId;
 
+    @Column(unique = true)
     private String matricule;
     private String cin;
     private String adresse;

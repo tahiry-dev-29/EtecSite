@@ -10,7 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/etudiants")
 @RequiredArgsConstructor
@@ -64,5 +65,10 @@ public class EtudiantController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         etudiantService.deleteEtudiant(id);
+    }
+
+    @GetMapping("/complet/{id}")
+    public Map<String, Object> getComplet(@PathVariable Long id) {
+        return etudiantService.getEtudiantComplet(id);
     }
 }

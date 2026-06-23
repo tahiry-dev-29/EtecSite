@@ -9,8 +9,8 @@ import java.util.Optional;
 @Repository
 public interface EnseignantRepository extends JpaRepository<Enseignant, Long> {
 
-    Optional<Enseignant> findByMail(String mail);
+    Optional<Enseignant> findByMatricule(String matricule);
 
-    boolean existsByMail(String mail);
+    boolean existsByMatricule(String matricule);
 
 }

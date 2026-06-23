@@ -1,6 +1,10 @@
 package com.example.Etudiant.demo.service;
 
+import com.example.Etudiant.demo.client.FiliereClient;
+import com.example.Etudiant.demo.client.NiveauClient;
 import com.example.Etudiant.demo.client.UserClient;
+import com.example.Etudiant.demo.dto.FiliereDto;
+import com.example.Etudiant.demo.dto.NiveauDto;
 import com.example.Etudiant.demo.dto.UserDto;
 import com.example.Etudiant.demo.entity.Etudiant;
 import com.example.Etudiant.demo.repository.EtudiantRepository;
@@ -28,9 +32,11 @@ public class EtudiantService {
 
     private final EtudiantRepository etudiantRepository;
     private final UserClient userClient;
+    private final FiliereClient filiereClient;
+    private final NiveauClient niveauClient;
     private final String UPLOAD_DIR = "upload/";
 
-    // 🔥 CREATE ETUDIANT
+    // CREATE ETUDIANT
     public Etudiant createEtudiant(String matricule,
                                    String cin,
                                    String adresse,
@@ -60,7 +66,11 @@ public class EtudiantService {
             Files.write(diplomePath, photo.getBytes());
 
 
+
             Etudiant etudiant = new Etudiant();
+            if (etudiantRepository.existsByMatricule(matricule)) {
+                throw new RuntimeException("Ce matricule est éxiste déjà");
+            }
             etudiant.setMatricule(matricule);
             etudiant.setCin(cin);
             etudiant.setAdresse(adresse);
@@ -69,7 +79,7 @@ public class EtudiantService {
             etudiant.setReleve(releveName);
             etudiant.setDiplome(diplomeName);
 
-            // 🔵 récupérer userId depuis JwtFilter
+            // récupérer userId depuis JwtFilter
             Long userId = (Long) request.getAttribute("userId");
 
 
@@ -77,10 +87,21 @@ public class EtudiantService {
                 throw new RuntimeException("userId introuvable dans le token");
             }
 
-            // 🔵 lien User ↔ Etudiant
+            // lien User, filiere, niveau ↔ Etudiant
             etudiant.setUserId(userId);
             etudiant.setFiliereId(filiereId);
             etudiant.setNiveauId(niveauId);
+
+            try {
+                filiereClient.getFiliere(filiereId);
+                niveauClient.getNiveau(niveauId);
+            } catch (Exception e) {
+                throw new RuntimeException("Filière ou niveau introuvable");
+            }
+
+            System.out.println("userId = " + userId);
+            System.out.println("filiereId = " + filiereId);
+            System.out.println("niveauId = " + niveauId);
 
             return etudiantRepository.save(etudiant);
 
@@ -90,24 +111,24 @@ public class EtudiantService {
         }
 
     }
-    // 🔥 GET ALL ETUDIANTS
+    // GET ALL ETUDIANTS
     public Page<Etudiant> getAllEtudiants(Pageable pageable) {
         return etudiantRepository.findAll(pageable);
     }
 
-    // 🔥 GET BY ID
+    // GET BY ID
     public Etudiant getEtudiantById(Long id) {
         return etudiantRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Etudiant introuvable"));
     }
 
-    // 🔥 GET BY MATRICULE
+    // GET BY MATRICULE
     public Etudiant getByMatricule(String matricule) {
         return etudiantRepository.findByMatricule(matricule)
                 .orElseThrow(() -> new RuntimeException("Matricule introuvable"));
     }
 
-    // 🔥 UPDATE ETUDIANT
+    // UPDATE ETUDIANT
     public Etudiant updateEtudiant(Long id,
                                    String matricule,
                                    String cin,
@@ -171,7 +192,7 @@ public class EtudiantService {
         return etudiantRepository.save(existing);
     }
 
-    // 🔥 DELETE ETUDIANT
+    // DELETE ETUDIANT
     public void deleteEtudiant(Long id) {
         etudiantRepository.deleteById(id);
     }
@@ -187,10 +208,18 @@ public class EtudiantService {
                         etudiant.getUserId()
                 );
 
+        FiliereDto filiere =
+                filiereClient.getFiliere(etudiant.getFiliereId());
+
+        NiveauDto niveau =
+                niveauClient.getNiveau(etudiant.getNiveauId());
+
 
         return Map.of(
                 "etudiant", etudiant,
-                "user", user
+                "user", user,
+                "filiere", filiere,
+                "niveau", niveau
         );
     }
 }

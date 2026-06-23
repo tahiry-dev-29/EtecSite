@@ -5,9 +5,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "FILIERE")
+@FeignClient(name = "FILIERES")
 public interface FiliereClient {
 
-    @GetMapping("/filieres/{id}")
+    @GetMapping("/api/filieres/{id}")
     FiliereDto getFiliere(@PathVariable Long id);
 }
