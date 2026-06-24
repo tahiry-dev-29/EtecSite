@@ -1,21 +1,40 @@
 package com.etudiant.note.service.impl;
 
+import com.etudiant.note.Dto.EtudiantResponse;
+import com.etudiant.note.client.EtudiantClient;
+import com.etudiant.note.client.MatiereClient;
 import com.etudiant.note.entity.Note;
 import com.etudiant.note.repository.NoteRepository;
 import com.etudiant.note.service.NoteService;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
+    private final EtudiantClient etudiantClient;
+    private final MatiereClient matiereClient;
     @Override
     public Note save(Note note) {
-        return noteRepository.save(note);
+
+        try {
+            EtudiantResponse etudiant = etudiantClient.getEtudiant(note.getEtudiantId());
+
+            if (etudiant == null) {
+                throw new RuntimeException("Etudiant Introuvable");
+            }
+
+            return noteRepository.save(note);
+        } catch (FeignException e) {
+            throw new RuntimeException("Etudiant n'existe pas");
+        }
     }
 
     @Override
@@ -42,5 +61,18 @@ public class NoteServiceImpl implements NoteService {
     public void delete(Long id) {
         Note existing = findById(id);
         noteRepository.delete(existing);
+    }
+
+    @Override
+    public List<Note> getByEtudiant(Long etudiantId) {
+        return noteRepository.findByEtudiantId(etudiantId);
+    }
+
+    @Override
+    public Double calculerMoyenne(Long etudiantId) {
+
+        Double moyenne = noteRepository.calculerMoyenne(etudiantId);
+
+        return moyenne != null ? moyenne : 0.0;
     }
 }

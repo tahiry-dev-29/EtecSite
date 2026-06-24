@@ -5,7 +5,10 @@ import com.etudiant.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -38,6 +41,22 @@ public class NoteController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         noteService.delete(id);
+    }
+
+    @GetMapping("/etudiant/{etudiantId}")
+    public ResponseEntity<List<Note>> getByEtudiant(
+            @PathVariable Long etudiantId) {
+
+        return ResponseEntity.ok(
+                noteService.getByEtudiant(etudiantId));
+    }
+
+    @GetMapping("/moyenne/{etudiantId}")
+    public ResponseEntity<Double> moyenne(
+            @PathVariable Long etudiantId) {
+
+        return ResponseEntity.ok(
+                noteService.calculerMoyenne(etudiantId));
     }
 
 }

@@ -17,6 +17,8 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long etudiantId;
+    private Long matiereId;
     private double valeur;
     private String mention;
 }
