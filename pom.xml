@@ -37,6 +37,7 @@
     <module>memoire</module>
     <module>admin</module>
     <module>semestre</module>
+    <module>univesitaire</module>
   </modules>
 
   <properties>
