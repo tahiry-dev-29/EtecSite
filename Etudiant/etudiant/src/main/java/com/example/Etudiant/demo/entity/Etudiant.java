@@ -31,4 +31,5 @@ public class Etudiant {
     private String photo;
     private String releve;
     private String diplome;
+    private String qrCode;
 }

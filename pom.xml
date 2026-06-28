@@ -38,6 +38,7 @@
     <module>admin</module>
     <module>semestre</module>
     <module>univesitaire</module>
+    <module>email</module>
   </modules>
 
   <properties>

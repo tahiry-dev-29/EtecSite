@@ -27,7 +27,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/enseignant/**").authenticated()
+                        .requestMatchers("/enseignant/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(
