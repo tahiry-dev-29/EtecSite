@@ -8,6 +8,5 @@ public class FiliereDto {
     private Long id;
     private String nom;
     private String code;
-    private String description;
 
 }

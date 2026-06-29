@@ -28,12 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-
-
-        // laisser passer les routes publiques
-        if(path.startsWith("/etudiants")
-                || path.startsWith("/api/auth")) {
-
+        if(path.startsWith("/api/auth")) {
             filterChain.doFilter(request, response);
             return;
         }

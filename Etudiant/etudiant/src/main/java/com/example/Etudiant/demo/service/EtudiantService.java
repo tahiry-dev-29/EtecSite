@@ -127,10 +127,26 @@ public class EtudiantService {
 
 // Génération du QR Code
             byte[] qrCode;
+
             try {
+
+                qrCode =
+                        qrCodeService.generateQRCode(qrContent);
+
+
                 qrCode = qrCodeService.generateQRCode(qrContent);
+
+                savedEtudiant.setQrCode(qrCode);
+
+                etudiantRepository.save(savedEtudiant);
+
+
             } catch (Exception e) {
-                throw new RuntimeException("Erreur lors de la génération du QR Code", e);
+
+                throw new RuntimeException(
+                        "Erreur lors de la génération du QR Code",
+                        e
+                );
             }
 
 // Préparer l'email

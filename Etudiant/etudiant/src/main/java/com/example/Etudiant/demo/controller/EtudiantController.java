@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,5 +87,15 @@ public class EtudiantController {
     @GetMapping("/complet/{id}")
     public Map<String, Object> getComplet(@PathVariable Long id) {
         return etudiantService.getEtudiantComplet(id);
+    }
+
+    @GetMapping("/{id}/qr")
+    public ResponseEntity<byte[]> getQrCode(@PathVariable Long id) {
+
+        Etudiant etudiant = etudiantService.getEtudiantById(id);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "image/png")
+                .body(etudiant.getQrCode());
     }
 }

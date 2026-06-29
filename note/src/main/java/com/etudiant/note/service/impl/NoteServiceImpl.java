@@ -1,9 +1,8 @@
 package com.etudiant.note.service.impl;
 
-import com.etudiant.note.Dto.EtudiantResponse;
-import com.etudiant.note.Dto.MatiereDto;
-import com.etudiant.note.client.EtudiantClient;
-import com.etudiant.note.client.MatiereClient;
+import com.common.common.dto.NotificationRequest;
+import com.etudiant.note.Dto.*;
+import com.etudiant.note.client.*;
 import com.etudiant.note.entity.Note;
 import com.etudiant.note.repository.NoteRepository;
 import com.etudiant.note.service.NoteService;
@@ -23,6 +22,11 @@ public class NoteServiceImpl implements NoteService {
     private final NoteRepository noteRepository;
     private final EtudiantClient etudiantClient;
     private final MatiereClient matiereClient;
+    private final NotificationClient notificationClient;
+    private final UserClient userClient;
+    private final FiliereClient filiereClient;
+    private final NiveauClient niveauClient;
+    private final DomaineClient domaineClient;
     @Override
     public Note save(Note note) {
 
@@ -33,18 +37,85 @@ public class NoteServiceImpl implements NoteService {
                 throw new RuntimeException("Etudiant Introuvable");
             }
         }catch (FeignException e) {
+        throw new RuntimeException("Matiere introuvable");
+    }
 
-                System.out.println(
-                        "Erreur Feign : "
-                                + e.status()
-                                + " "
-                                + e.getMessage()
-                );
+        try{
+            UserDto user =
+                    userClient.getUser(
+                            note.getUserId()
+                    );
+
+
+            if (user == null) {
 
                 throw new RuntimeException(
-                        "Etudiant introuvable"
+                        "Utilisateur introuvable"
                 );
+
             }
+
+        }catch (FeignException e) {
+            throw new RuntimeException("Utilisateur introuvable");
+        }
+
+        try{
+            FiliereDto filiere =
+                    filiereClient.getFiliere(
+                            note.getFiliereId()
+                    );
+
+
+            if (filiere == null) {
+
+                throw new RuntimeException(
+                        "Filière introuvable"
+                );
+
+            }
+
+        }catch (FeignException e) {
+            throw new RuntimeException("Filière introuvable");
+        }
+
+        try{
+            NiveauDto niveau =
+                    niveauClient.getNiveau(
+                            note.getNiveauId()
+                    );
+
+
+            if (niveau == null) {
+
+                throw new RuntimeException(
+                        "Niveau introuvable"
+                );
+
+            }
+
+        }catch (FeignException e) {
+            throw new RuntimeException("Niveau introuvable");
+        }
+
+        try{
+            DomaineDto domaine =
+                    domaineClient.getDomaine(
+                            note.getDomaineId()
+                    );
+
+
+            if (domaine == null) {
+
+                throw new RuntimeException(
+                        "Domaine introuvable"
+                );
+
+            }
+
+        }catch (FeignException e) {
+            throw new RuntimeException("Domaine introuvable");
+        }
+
 
         try{
             MatiereDto matiere =
@@ -65,9 +136,27 @@ public class NoteServiceImpl implements NoteService {
                 throw new RuntimeException("Matiere introuvable");
             }
 
-            return noteRepository.save(note);
+        Note saved = noteRepository.save(note);
 
+        // Création de la notification
+        NotificationRequest request = new NotificationRequest();
+
+        request.setUserId(saved.getUserId());
+
+        request.setTitre("Nouvelle note");
+
+        request.setMessage(
+                "Votre note de "
+                        + saved.getValeur()
+                        + " a été enregistrée."
+        );
+
+        // Envoi de la notification
+        notificationClient.envoyer(request);
+
+        return saved;
     }
+
     @Override
     public Page<Note> findAll(Pageable pageable) {
         return noteRepository.findAll(pageable);
@@ -120,6 +209,27 @@ public class NoteServiceImpl implements NoteService {
                 );
 
 
+        UserDto user =
+                userClient.getUser(
+                        note.getUserId()
+                );
+
+        FiliereDto filiere =
+                filiereClient.getFiliere(
+                        note.getFiliereId()
+                );
+
+        NiveauDto niveau =
+                niveauClient.getNiveau(
+                        note.getNiveauId()
+                );
+
+        DomaineDto domaine =
+                domaineClient.getDomaine(
+                        note.getDomaineId()
+                );
+
+
         MatiereDto matiere =
                 matiereClient.getMatiere(
                         note.getMatiereId()
@@ -128,6 +238,10 @@ public class NoteServiceImpl implements NoteService {
 
       return Map.of(
                 "etudiant", etudiant,
+                "user", user,
+                "filiere", filiere,
+                "niveau", niveau,
+                "domaine", domaine,
                 "matiere", matiere
         );
     }

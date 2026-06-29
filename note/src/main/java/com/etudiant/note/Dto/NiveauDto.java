@@ -6,5 +6,4 @@ import lombok.Data;
 public class NiveauDto {
     private Long id;
     private String nom;
-    private String description;
 }

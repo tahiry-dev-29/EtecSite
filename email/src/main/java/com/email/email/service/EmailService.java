@@ -32,27 +32,41 @@ public class EmailService {
                 );
 
 
-        helper.setTo(request.getTo());
+        // email de l'expéditeur
+        helper.setFrom("flavienrandria81@gmail.com");
 
+
+        // destinataire
+        helper.setTo(
+                request.getTo()
+        );
+
+
+        // sujet
         helper.setSubject(
                 request.getSubject()
         );
 
 
+        // contenu du mail
         helper.setText(
-                request.getMessage()
+                request.getMessage(),
+                true
         );
 
 
-        if(request.getAttachment()!=null){
+        // pièce jointe si existe
+        if(request.getAttachment() != null
+                && request.getFileName() != null) {
+
 
             helper.addAttachment(
                     request.getFileName(),
+
                     new ByteArrayResource(
                             request.getAttachment()
                     )
             );
-
         }
 
 
