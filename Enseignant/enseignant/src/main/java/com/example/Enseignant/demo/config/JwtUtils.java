@@ -22,7 +22,8 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private long expirationTime;
 
-    public String generationToken(String email, String role, Long userId) {
+    // 🔵 Génération (optionnel ici côté Etudiant-Service)
+    public String generateToken(String email, String role, Long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
         claims.put("userId", userId);
@@ -45,14 +46,16 @@ public class JwtUtils {
         return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public boolean validationToken(String token) {
-        return !isTokenExpirated(token);
+    // 🔵 VALIDATION SIMPLE (sans UserDetailsService)
+    public boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 
-    private boolean isTokenExpirated(String token) {
+    private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
+    // 🔵 EXTRACTIONS
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -61,7 +64,7 @@ public class JwtUtils {
         return extractAllClaims(token).get("role", String.class);
     }
 
-    public Long extrctUserId(String token) {
+    public Long extractUserId(String token) {
         return extractAllClaims(token).get("userId", Long.class);
     }
 
@@ -76,7 +79,7 @@ public class JwtUtils {
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(getSignKey())
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 }

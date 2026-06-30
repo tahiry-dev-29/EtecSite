@@ -24,35 +24,56 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
+        String path = request.getServletPath();
+
+        if(path.startsWith("/api/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String authHeader = request.getHeader("Authorization");
+
         String jwt = null;
 
+        // 🔵 1. récupérer token
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
         }
 
+        // 🔵 2. validation + extraction
         if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             try {
                 String email = jwtUtils.extractEmail(jwt);
-                Long userId = jwtUtils.extrctUserId(jwt);
+                Long userId = jwtUtils.extractUserId(jwt);
                 String role = jwtUtils.extractRole(jwt);
 
-                if (jwtUtils.validationToken(jwt)) {
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                            email,
-                            null,
-                            Collections.singletonList(
-                                    new SimpleGrantedAuthority("ROLE_" + role)
-                            ));
+                // 🔵 validation simple
+                if (jwtUtils.validateToken(jwt)) {
+
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    Collections.singletonList(
+                                            new SimpleGrantedAuthority("ROLE_" + role)
+                                    )
+                            );
+                    // 🔵 stocker infos pour Controller/Service
                     request.setAttribute("userId", userId);
                     request.setAttribute("role", role);
                     request.setAttribute("email", email);
 
+                    System.out.println("Authorization = " + authHeader);
+                    System.out.println("JWT = " + jwt);
+                    System.out.println("Email = " + email);
+                    System.out.println("Role = " + role);
+                    System.out.println("UserId = " + userId);
+
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
+
             } catch (Exception e) {
                 filterChain.doFilter(request, response);
                 return;

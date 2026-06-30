@@ -17,7 +17,7 @@ public class MemoireController {
 
     private final MemoireService service;
 
-    @PostMapping(name = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Memoire save(
             @RequestParam Long etudiantId,
             @RequestParam Long userId,

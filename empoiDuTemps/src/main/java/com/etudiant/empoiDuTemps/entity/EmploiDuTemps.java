@@ -21,6 +21,7 @@ public class EmploiDuTemps {
     private Long filiereId;
     private Long matiereId;
     private Long enseignantId;
+    private Long semestreId;
     private LocalDate date;
     private LocalTime heureDebut;
     private LocalTime heureFin;
