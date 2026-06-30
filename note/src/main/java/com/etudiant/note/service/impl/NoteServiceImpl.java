@@ -30,17 +30,19 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note save(Note note) {
 
+        EtudiantResponse etudiant;
         try {
-            EtudiantResponse etudiant = etudiantClient.getEtudiant(note.getEtudiantId());
+          etudiant = etudiantClient.getEtudiant(note.getEtudiantId());
 
             if (etudiant == null) {
                 throw new RuntimeException("Etudiant Introuvable");
             }
         }catch (FeignException e) {
-        throw new RuntimeException("Matiere introuvable");
+        throw new RuntimeException("Etudiant introuvable");
     }
 
-        try{
+        try {
+            System.out.println("UserId = " + note.getUserId());
             UserDto user =
                     userClient.getUser(
                             note.getUserId()
@@ -56,9 +58,14 @@ public class NoteServiceImpl implements NoteService {
             }
 
         }catch (FeignException e) {
-            throw new RuntimeException("Utilisateur introuvable");
-        }
 
+                System.out.println("============== FEIGN USER ==============");
+                System.out.println("Status : " + e.status());
+                System.out.println("Message : " + e.getMessage());
+                e.printStackTrace();
+
+                throw e;
+            }
         try{
             FiliereDto filiere =
                     filiereClient.getFiliere(
@@ -75,7 +82,13 @@ public class NoteServiceImpl implements NoteService {
             }
 
         }catch (FeignException e) {
-            throw new RuntimeException("Filière introuvable");
+
+            System.out.println("============== FEIGN FILIERE ==============");
+            System.out.println("Status : " + e.status());
+            System.out.println("Message : " + e.getMessage());
+            e.printStackTrace();
+
+            throw e;
         }
 
         try{
@@ -132,9 +145,11 @@ public class NoteServiceImpl implements NoteService {
 
             }
 
-            }catch (FeignException e) {
-                throw new RuntimeException("Matiere introuvable");
-            }
+        }catch (FeignException e) {
+            throw new RuntimeException(
+                    "Matiere introuvable"
+            );
+        }
 
         Note saved = noteRepository.save(note);
 
@@ -142,6 +157,7 @@ public class NoteServiceImpl implements NoteService {
         NotificationRequest request = new NotificationRequest();
 
         request.setUserId(saved.getUserId());
+        request.setEtudiantId(etudiant.getId());
 
         request.setTitre("Nouvelle note");
 

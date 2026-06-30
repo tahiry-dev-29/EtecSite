@@ -16,6 +16,7 @@ public class Notification {
     private Long id;
 
     private Long userId;
+    private Long etudiantId;
     private String titre;
     private String message;
     private boolean lu = false;

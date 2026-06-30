@@ -1,5 +1,7 @@
 package com.memoire.memoire.service.impl;
 
+import com.common.common.dto.NotificationRequest;
+import com.memoire.memoire.client.*;
 import com.memoire.memoire.entity.Memoire;
 import com.memoire.memoire.repository.MemoireRepository;
 import com.memoire.memoire.service.MemoireService;
@@ -21,9 +23,27 @@ import java.util.UUID;
 public class MemoireServiceImpl implements MemoireService {
 
     private final MemoireRepository repository;
+    private final EtudiantClient etudiantClient;
+    private final NotificationClient notificationClient;
+    private final UserClient userClient;
+    private final NoteClient noteClient;
+    private final EnseignantClient enseignantClient;
     private final String UPLOAD_DIR = "/upload";
     @Override
-    public Memoire save(String theme, String description, MultipartFile file) {
+    public Memoire save(Long etudiantId,
+                        Long userId,
+                        Long noteId,
+                        Long enseignantId,
+                        String theme,
+                        String description,
+                        MultipartFile file) {
+
+        etudiantClient.findById(etudiantId);
+        userClient.findById(userId);
+        noteClient.findById(noteId);
+        etudiantClient.findById(enseignantId);
+
+
         try {
             File dir = new File(UPLOAD_DIR);
             if (!dir.exists()) {
@@ -35,15 +55,34 @@ public class MemoireServiceImpl implements MemoireService {
             Files.write(path, file.getBytes());
 
             Memoire memoire = new Memoire();
+            memoire.setEtudiantId(etudiantId);
+            memoire.setUserId(userId);
+            memoire.setNoteId(noteId);
+            memoire.setEnsignantId(enseignantId);
             memoire.setTheme(theme);
             memoire.setDescription(description);
             memoire.setLivre(livrename);
 
-            return repository.save(memoire);
+
+            Memoire saved = repository.save(memoire);
+
+            NotificationRequest request = new NotificationRequest();
+
+            request.setUserId(userId);
+            request.setEtudiantId(etudiantId);
+            request.setTitre("Mémoire déposé");
+            request.setMessage("Votre mémoire \"" + theme + "\" a été déposé avec succès.");
+
+            notificationClient.envoyer(request);
+
+            return saved;
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Erreur de créer ce fichier");
         }
+
+
     }
 
     @Override

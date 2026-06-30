@@ -28,6 +28,8 @@ public class NotificationService {
                 request.getUserId()
         );
 
+        notification.setEtudiantId(request.getEtudiantId());
+
         notification.setTitre(
                 request.getTitre()
         );
@@ -48,6 +50,11 @@ public class NotificationService {
 
                 saved
 
+        );
+
+        messagingTemplate.convertAndSend(
+                "/topic/etudiant/" + saved.getEtudiantId(),
+                saved
         );
 
         return saved;

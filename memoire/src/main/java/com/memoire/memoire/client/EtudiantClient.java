@@ -1,14 +1,13 @@
-package com.etudiant.note.client;
+package com.memoire.memoire.client;
 
-import com.etudiant.note.Dto.EtudiantResponse;
+import com.memoire.memoire.dto.EtudiantDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name="ETUDIANT")
+@FeignClient(name = "ETUDIANT")
 public interface EtudiantClient {
 
-    @GetMapping("/etudiants/id/{id}")
-    EtudiantResponse getEtudiant(@PathVariable Long id);
-
+    @GetMapping("/etudiants/{id}")
+    EtudiantDto findById(@PathVariable Long id);
 }

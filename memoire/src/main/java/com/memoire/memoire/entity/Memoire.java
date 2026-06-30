@@ -17,6 +17,10 @@ public class Memoire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long etudiantId;
+    private Long userId;
+    private Long noteId;
+    private Long ensignantId;
     private String theme;
     private String description;
     private String livre;

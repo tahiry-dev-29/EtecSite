@@ -19,11 +19,15 @@ public class MemoireController {
 
     @PostMapping(name = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Memoire save(
+            @RequestParam Long etudiantId,
+            @RequestParam Long userId,
+            @RequestParam Long noteId,
+            @RequestParam Long enseignantId,
             @RequestParam String theme,
             @RequestParam String description,
             @RequestParam("livre")MultipartFile livre
             ) {
-        return service.save(theme, description, livre);
+        return service.save(etudiantId, userId, noteId, enseignantId,theme, description, livre);
     }
 
     @GetMapping
