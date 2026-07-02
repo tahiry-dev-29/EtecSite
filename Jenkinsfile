@@ -18,39 +18,30 @@ pipeline {
         stage('Verify Structure') {
             steps {
                 bat 'dir'
-                bat 'dir etec-parent'
             }
         }
 
-        stage('Clean & Build All Microservices') {
+        stage('Clean & Build') {
             steps {
-                dir('etec-parent') {
-                    bat 'mvn clean install -DskipTests'
-                }
+                bat 'mvn clean install -DskipTests'
             }
         }
 
         stage('Run Tests') {
             steps {
-                dir('etec-parent') {
-                    bat 'mvn test'
-                }
+                bat 'mvn test'
             }
         }
 
         stage('Package') {
             steps {
-                dir('etec-parent') {
-                    bat 'mvn package -DskipTests'
-                }
+                bat 'mvn package -DskipTests'
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                dir('etec-parent') {
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                }
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             }
         }
     }
