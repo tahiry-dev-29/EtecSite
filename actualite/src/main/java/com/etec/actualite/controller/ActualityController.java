@@ -47,7 +47,7 @@ public class ActualityController {
             @RequestParam String description,
             @RequestParam Status status,
             @RequestParam Categorie categorie,
-            @RequestParam MultipartFile file
+            @RequestParam(required = false) MultipartFile file
     ) {
         return service.update(id, titre, description, status, categorie, file);
     }

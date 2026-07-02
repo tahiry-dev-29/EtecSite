@@ -29,7 +29,7 @@ public class ActualityServiceImpl implements ActualiteService {
     public Actuality save(String titre, String description, Status status, Categorie categorie, MultipartFile file) {
         try {
             File dir = new File(UPLOAD_DIR);
-            if (dir.exists()) {
+            if (!dir.exists()) {
                 dir.mkdirs();
             }
 
@@ -40,8 +40,8 @@ public class ActualityServiceImpl implements ActualiteService {
             Actuality actuality = new Actuality();
             actuality.setTitre(titre);
             actuality.setDescription(description);
-            actuality.setStatus(Status.BROUILLON);
-            actuality.setCategorie(categorie.EVENEMENT);
+            actuality.setStatus(status);
+            actuality.setCategorie(categorie);
             actuality.setImage(filename);
 
             return repository.save(actuality);

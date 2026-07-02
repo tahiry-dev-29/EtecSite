@@ -26,6 +26,8 @@ public class SecurityConfig {
                         .pathMatchers("/api/etudiant/**").hasRole("ETUDIANT")
                         .pathMatchers("/api/enseignant/**").hasRole("ENSEIGNANT")
 
+                        .pathMatchers("/api/actualites/**").permitAll()
+
                         // others
                         .anyExchange().authenticated()
                 )

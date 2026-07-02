@@ -55,6 +55,12 @@ public class GatewayConfig {
                         .filters(f -> f.filter(filter.apply(new JwtAuthenticationFilter.Config())))
                         .uri("lb://ENSEIGNANT"))
 
+                // =========================
+                // ACTUALITES SERVICE (PUBLIC)
+                // =========================
+                .route("actualites", r -> r.path("/api/actualites/**")
+                        .uri("lb://ACTUALITE")) // Redirige vers le microservice enregistré sous le nom ACTUALITE sur Eureka
+
                 .build();
     }
 }
