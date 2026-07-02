@@ -30,7 +30,7 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
 
 
-    @PostMapping("/register_admin")
+    @PostMapping("/register-admin")
     public ResponseEntity<?> registerAdmin(@RequestBody User adminUser) {
 
         // 1. Vérifier si l'email existe déjà
@@ -133,5 +133,13 @@ public class UserController {
         return userRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+
+        userRepository.deleteById(id);
+
+        return ResponseEntity.ok("Utilisateur supprimé");
     }
 }

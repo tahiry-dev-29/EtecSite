@@ -43,6 +43,13 @@
     <module>common</module>
     <module>profile</module>
     <module>moyenne</module>
+    <module>coursenligne</module>
+    <module>quiz</module>
+    <module>devoir</module>
+    <module>visio</module>
+    <module>progression</module>
+    <module>messagerie</module>
+
   </modules>
 
   <properties>

@@ -2,6 +2,7 @@ package com.abscence.presence.service.impl;
 
 import com.abscence.presence.client.EmploiDuTempsClient;
 import com.abscence.presence.client.EtudiantClient;
+import com.abscence.presence.client.NotificationClient;
 import com.abscence.presence.client.UserClient;
 import com.abscence.presence.dto.EmploiDuTempsDto;
 import com.abscence.presence.dto.EtudiantDto;
@@ -9,6 +10,7 @@ import com.abscence.presence.dto.UserDto;
 import com.abscence.presence.entity.Presence;
 import com.abscence.presence.repository.PresenceRepository;
 import com.abscence.presence.service.PresenceService;
+import com.common.common.dto.NotificationRequest;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ public class PresenceServiceImpl implements PresenceService {
     private final EtudiantClient etudiantClient;
     private final EmploiDuTempsClient emploiDuTempsClient;
     private final UserClient userClient;
+    private final NotificationClient notificationClient;
     @Override
     public Presence save(Presence presence) {
 
@@ -85,7 +88,21 @@ public class PresenceServiceImpl implements PresenceService {
                     "Feign status = " + e.status() + ", réponse = " + e.contentUTF8()
             );
         }
-        return repository.save(presence);
+
+        Presence  saved =
+                repository.save(presence);
+        NotificationRequest request =
+                new NotificationRequest(
+                        presence.getUserId(),
+                        presence.getEtudiantId(),
+                        "Absence",
+                        "Une absence a été enregistrée"
+                );
+
+
+        notificationClient.envoyer(request);
+
+        return saved;
     }
 
     @Override

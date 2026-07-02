@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/slides")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class SlideController {
 
@@ -21,9 +22,10 @@ public class SlideController {
     public Slide save(
             @RequestParam String titre,
             @RequestParam String description,
+            @RequestParam Boolean active,
             @RequestParam MultipartFile file
     ) {
-        return slideService.save(titre, description, file);
+        return slideService.save(titre, description, active, file);
     }
 
     @GetMapping
@@ -41,9 +43,10 @@ public class SlideController {
             @PathVariable Long id,
             @RequestParam String titre,
             @RequestParam String description,
+            @RequestParam Boolean active,
             @RequestParam(required = false) MultipartFile file
     ) {
-        return slideService.update(id, titre, description, file);
+        return slideService.update(id, titre, description, active, file);
     }
 
     @DeleteMapping("/{id}")

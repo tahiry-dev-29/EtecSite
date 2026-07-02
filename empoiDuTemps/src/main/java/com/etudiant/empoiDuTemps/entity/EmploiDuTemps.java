@@ -23,6 +23,8 @@ public class EmploiDuTemps {
     private Long enseignantId;
     private Long niveauId;
     private Long semestreId;
+    private Long userId;
+    private Long etudiantId;
     private LocalDate date;
     private LocalTime heureDebut;
     private LocalTime heureFin;

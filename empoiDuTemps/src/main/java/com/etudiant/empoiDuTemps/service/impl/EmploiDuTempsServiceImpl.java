@@ -1,5 +1,6 @@
 package com.etudiant.empoiDuTemps.service.impl;
 
+import com.common.common.dto.NotificationRequest;
 import com.etudiant.empoiDuTemps.client.*;
 import com.etudiant.empoiDuTemps.dto.*;
 import com.etudiant.empoiDuTemps.entity.EmploiDuTemps;
@@ -23,6 +24,7 @@ public class EmploiDuTempsServiceImpl implements EmploiDuTempsService {
     private final EnseignantClient enseignantClient;
     private final SemestreClient semestreClient;
     private final NiveauClient niveauClient;
+    private final NotificationClient notificationClient;
 
     @Override
     public EmploiDuTemps save(EmploiDuTemps emploiDuTemps) {
@@ -78,7 +80,20 @@ public class EmploiDuTempsServiceImpl implements EmploiDuTempsService {
             throw new RuntimeException("Semestre Introuvable");
         }
 
-        return repository.save(emploiDuTemps);
+        EmploiDuTemps  saved =
+                repository.save(emploiDuTemps);
+        NotificationRequest request =
+                new NotificationRequest(
+                        emploiDuTemps.getUserId(),
+                        emploiDuTemps.getEtudiantId(),
+                        "Absence",
+                        "Une absence a été enregistrée"
+                );
+
+
+        notificationClient.envoyer(request);
+
+        return saved;
     }
 
     @Override

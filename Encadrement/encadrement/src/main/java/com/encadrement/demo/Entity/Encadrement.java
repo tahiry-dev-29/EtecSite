@@ -23,6 +23,7 @@ public class Encadrement {
     private Long etudiantId;
     private Long enseignantId;
     private Long memoireId;
+    private Long userId;
     private String sujet;
     private String anneeUniversitaire;
     private LocalDate dateDebut;

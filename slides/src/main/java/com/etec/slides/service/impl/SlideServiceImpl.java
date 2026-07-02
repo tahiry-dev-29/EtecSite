@@ -23,7 +23,7 @@ public class SlideServiceImpl implements SlideService {
     private final SlideRepository slideRepository;
     private final String UPLOAD_DIR = "upload/";
     @Override
-    public Slide save(String titre, String description, MultipartFile file) {
+    public Slide save(String titre, String description, Boolean active, MultipartFile file) {
 
         try {
             File dir = new File(UPLOAD_DIR);
@@ -38,6 +38,7 @@ public class SlideServiceImpl implements SlideService {
             Slide slide = new Slide();
             slide.setTitre(titre);
             slide.setDescription(description);
+            slide.setActive(active);
             slide.setImage(filename);
 
             return slideRepository.save(slide);
@@ -59,12 +60,13 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public Slide update(Long id, String titre, String description, MultipartFile file) {
+    public Slide update(Long id, String titre, String description, Boolean active, MultipartFile file) {
 
         Slide existing = findById(id);
 
         existing.setTitre(titre);
         existing.setDescription(description);
+        existing.setActive(active);
 
         try {
             if (file != null && !file.isEmpty()) {

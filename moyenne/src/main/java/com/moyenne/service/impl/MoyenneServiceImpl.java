@@ -53,7 +53,7 @@ public class MoyenneServiceImpl implements MoyenneService {
 // Création de la notification
         NotificationRequest request = new NotificationRequest();
 
-       /* request.setEtudiant(saved.getEtudiantId());*/
+       request.setEtudiantId(saved.getEtudiantId());
         request.setUserId(notes.get(0).getUserId());
 
         request.setTitre("Moyenne calculée");

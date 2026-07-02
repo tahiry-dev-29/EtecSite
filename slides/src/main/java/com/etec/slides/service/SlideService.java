@@ -7,9 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface SlideService {
 
-    public Slide save(String titre, String description, MultipartFile file);
+    Slide save(String titre, String description,Boolean active, MultipartFile file);
     Page<Slide> findAll(Pageable pageable);
     Slide findById(Long id);
-    public Slide update(Long id, String titre, String description, MultipartFile file);
+    Slide update(Long id, String titre, String description, Boolean active, MultipartFile file);
     String delete(Long id);
 }

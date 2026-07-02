@@ -17,8 +17,7 @@ public class Moyenne {
     private Long id;
 
     private Long etudiantId;
-
+    private Long userId;
     private Double moyenneGenerale;
-
     private String mention;
 }

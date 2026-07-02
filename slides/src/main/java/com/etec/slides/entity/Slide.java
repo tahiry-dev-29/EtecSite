@@ -19,4 +19,5 @@ public class Slide {
     private String titre;
     private String image;
     private String description;
+    private boolean active = true;
 }

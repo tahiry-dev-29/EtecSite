@@ -2,10 +2,14 @@ package com.admin.admin.dto;
 
 import lombok.Data;
 
-@Data // Génère automatiquement les getters, setters et constructeurs grâce à Lombok
+@Data
 public class UserRegistrationDTO {
     private String username;
     private String email;
     private String password;
-    private String role; // "SUPER_ADMIN", "ADMIN", ou "PEDAGOGIQUE_ADMIN"
+    private String role;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+
 }
