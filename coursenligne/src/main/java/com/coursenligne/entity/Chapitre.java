@@ -3,6 +3,8 @@ package com.coursenligne.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "chapitres")
 @Data
@@ -21,5 +23,15 @@ public class Chapitre {
 
     private Integer ordre;
 
-    private Long coursEnLigneId;
+    @ManyToOne
+    @JoinColumn(name="cours_id")
+    private CoursEnLigne cours;
+
+
+    @OneToMany(
+            mappedBy="chapitre",
+            cascade=CascadeType.ALL
+    )
+    private List<Leçon> leçons;
+
 }

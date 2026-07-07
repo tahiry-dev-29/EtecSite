@@ -14,6 +14,6 @@ public interface CoursEnLigneService {
     CoursEnLigne getById(Long id);
 
     void delete(Long id);
-
+    
     CoursResponse getCoursById(Long id);
 }

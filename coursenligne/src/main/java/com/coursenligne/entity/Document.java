@@ -9,14 +9,26 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Document {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String nom;
+
 
     private String url;
 
-    private Long chapitreId;
+
+    private String type;
+
+
+    private Double taille;
+
+
+    @ManyToOne
+    @JoinColumn(name="leçon_id")
+    private Leçon leçon;
+
 }

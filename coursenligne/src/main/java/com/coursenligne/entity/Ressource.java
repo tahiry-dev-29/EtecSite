@@ -3,6 +3,8 @@ package com.coursenligne.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "ressources")
 @Data
@@ -10,16 +12,32 @@ import lombok.*;
 @AllArgsConstructor
 public class Ressource {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String titre;
+
+    private String nom;
+
+
+    private String url;
+
+
+    private Double taille;
+
+
+    private LocalDate dateAjout;
+
 
     @Enumerated(EnumType.STRING)
     private TypeRessource type;
 
-    private String url;
 
-    private Long chapitreId;
+    // Une ressource appartient à une leçon
+
+    @ManyToOne
+    @JoinColumn(name = "leçon_id")
+    private Leçon leçon;
+
 }

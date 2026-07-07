@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface NiveauClient {
 
     @GetMapping("/api/niveau/{id}")
-    NiveauDTO niveauById(@PathVariable Long id);
+    NiveauDTO getNiveauById(@PathVariable Long id);
 }

@@ -20,5 +20,7 @@ public class Video {
 
     private Integer duree;
 
-    private Long chapitreId;
+    @ManyToOne
+    @JoinColumn(name="leçon_id")
+    private Leçon leçon;
 }

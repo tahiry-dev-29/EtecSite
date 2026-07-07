@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface FiliereClient {
 
     @GetMapping("/api/filieres/{id}")
-    FiliereDTO filiereById(@PathVariable Long id);
+    FiliereDTO getFiliereById(@PathVariable Long id);
 }
