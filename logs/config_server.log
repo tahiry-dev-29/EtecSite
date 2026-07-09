@@ -24,3 +24,5 @@
 2026-07-09T12:33:10.424+03:00  INFO 91524 --- [config_server] [nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
 2026-07-09T12:33:26.299+03:00  INFO 91524 --- [config_server] [nio-8888-exec-2] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-15695850696449963104/discovery_service.properties]' via location 'file:/tmp/config-repo-15695850696449963104/'
 2026-07-09T12:33:42.656+03:00  INFO 91524 --- [config_server] [nio-8888-exec-3] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-15695850696449963104/api_gateway.properties]' via location 'file:/tmp/config-repo-15695850696449963104/'
+2026-07-09T13:01:34.839+03:00  INFO 91524 --- [config_server] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-09T13:01:34.856+03:00  INFO 91524 --- [config_server] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
