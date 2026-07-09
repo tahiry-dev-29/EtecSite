@@ -228,3 +228,4 @@ Each configuration key has been temporarily mapped to its replacement for your c
 2026-07-09T13:07:03.938+03:00  INFO 113289 --- [api_gateway] [reshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
 2026-07-09T13:07:04.006+03:00  INFO 113289 --- [api_gateway] [reshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
 2026-07-09T13:11:33.133+03:00  INFO 113289 --- [api_gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-07-09T13:16:33.136+03:00  INFO 113289 --- [api_gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration

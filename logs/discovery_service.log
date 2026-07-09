@@ -61,3 +61,8 @@
 2026-07-09T13:12:02.238+03:00  INFO 112825 --- [discovery_service] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
 2026-07-09T13:13:02.238+03:00  INFO 112825 --- [discovery_service] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
 2026-07-09T13:14:02.239+03:00  INFO 112825 --- [discovery_service] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-09T13:14:26.562+03:00  INFO 112825 --- [discovery_service] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance NOTE/WORKSTATION-ZBOOK:note:8096 with status UP (replication=false)
+2026-07-09T13:14:27.071+03:00  INFO 112825 --- [discovery_service] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance NOTE/WORKSTATION-ZBOOK:note:8096 with status UP (replication=true)
+2026-07-09T13:15:02.238+03:00  INFO 112825 --- [discovery_service] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-09T13:16:02.238+03:00  INFO 112825 --- [discovery_service] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-09T13:17:02.238+03:00  INFO 112825 --- [discovery_service] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
