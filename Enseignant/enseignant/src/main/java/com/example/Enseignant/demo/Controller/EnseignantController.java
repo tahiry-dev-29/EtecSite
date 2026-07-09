@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/Enseignants")
+@RequestMapping("/api/enseignants")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor // Gère automatiquement l'injection du service
 public class EnseignantController {

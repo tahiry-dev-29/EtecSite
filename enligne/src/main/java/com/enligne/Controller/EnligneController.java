@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/formation_enligne")
+@RequestMapping("/api/formationEnLigne")
 @RequiredArgsConstructor
 public class EnligneController {
 
