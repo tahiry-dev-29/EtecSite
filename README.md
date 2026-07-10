@@ -6,19 +6,15 @@
 
 ## 🏛️ Architecture
 
-```
-                     ┌─────────────────────────────┐
-                     │     API Gateway (:8090)      │
-                     │   (Spring Cloud Gateway)     │
-                     └──────────┬──────────────────┘
-                                │
-          ┌─────────────────────┼─────────────────────┐
-          ▼                     ▼                     ▼
-┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│   Config Server  │  │ Discovery Service│  │   Business       │
-│     (:8888)      │  │   Eureka (:8761) │  │   Microservices  │
-└──────────────────┘  └──────────────────┘  │   (32 services)  │
-                                            └──────────────────┘
+```mermaid
+graph TB
+    Client[🌐 Client Web / Mobile] --> Gateway[API Gateway :8090]
+    Gateway --> Config[Config Server :8888]
+    Gateway --> Discovery[Eureka Discovery :8761]
+    Gateway --> Services[32 Business Microservices]
+    Services --> MySQL[(MySQL Database)]
+    Discovery --> Services
+    Config --> Services
 ```
 
 **Flux :** Client → API Gateway → Eureka Discovery → Microservice → MySQL
@@ -46,6 +42,13 @@
 
 ### Prérequis
 
+```bash
+# Vérifier les versions installées
+java --version            # Java 21+
+mvn --version             # Maven 3.9+
+mysql --version           # MySQL 8.x
+```
+
 - **Java 21** (JDK)
 - **Maven** ≥ 3.9
 - **MySQL** 8.x avec base `siteetec` créée
@@ -57,13 +60,13 @@ Lancer dans cet ordre depuis la racine (`/backend/`) :
 
 ```bash
 # 1. Config Server (port 8888)
-mvn spring-boot:run -pl config_server -DskipTests
+mvn spring-boot:run -pl config_server -DskipTests -q
 
 # 2. Discovery Service / Eureka (port 8761)
-mvn spring-boot:run -pl discovery_service -DskipTests
+mvn spring-boot:run -pl discovery_service -DskipTests -q
 
 # 3. API Gateway (port 8090)
-mvn spring-boot:run -pl api_gateway -DskipTests
+mvn spring-boot:run -pl api_gateway -DskipTests -q
 ```
 
 ### Microservices Métier
@@ -93,8 +96,11 @@ mvn spring-boot:run -pl common -DskipTests        # Bibliothèque commune
 ### Build complet
 
 ```bash
-# Builder tous les modules
+# Builder tous les modules (sans tests)
 mvn clean install -DskipTests
+
+# Avec logs réduits (mode silencieux)
+mvn clean install -DskipTests -q
 ```
 
 ---
