@@ -13,15 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EnligneController {
 
-    public final EnligneService enligneService;
+    private final EnligneService enligneService;
 
     @PostMapping
     public Enligne create(@RequestBody Enligne enligne) {
         return enligneService.save(enligne);
     }
 
-    @GetMapping({"/id"})
-    public ResponseEntity<Enligne> getById(@PathVariable Long id_video){
+    @GetMapping("/{id}")
+    public ResponseEntity<Enligne> getById(@PathVariable("id") Long id_video) {
         return enligneService.getById(id_video)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -33,7 +33,7 @@ public class EnligneController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Enligne> update(@PathVariable Long id_video,
+    public ResponseEntity<Enligne> update(@PathVariable("id") Long id_video,
                                             @RequestBody Enligne encadreur) {
         return enligneService.getById(id_video)
                 .map(existing -> {
@@ -44,7 +44,7 @@ public class EnligneController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id_video) {
+    public ResponseEntity<Object> delete(@PathVariable("id") Long id_video) {
         return enligneService.getById(id_video)
                 .map(existing -> {
                     enligneService.delete(id_video);
@@ -52,6 +52,5 @@ public class EnligneController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
-
 
 }

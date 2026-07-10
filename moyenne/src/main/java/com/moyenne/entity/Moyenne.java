@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "moyennes")
+@Table(name = "moyenne_moyennes")
 public class Moyenne {
 
     @Id

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "documents")
+@Table(name = "coursenligne_documents")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

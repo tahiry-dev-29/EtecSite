@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "semestres")
+@Table(name = "semestre_semestres")
 public class Semestre {
 
     @Id

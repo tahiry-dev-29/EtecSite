@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "slide")
+@Table(name = "slides_slides")
 public class Slide {
 
     @Id

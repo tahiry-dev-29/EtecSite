@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name="Encadreur")
+@Table(name="encadreur_encadreurs")
 @Data
 public class Encadreur {
 
